@@ -42,7 +42,7 @@ class TransformerModel(nn.Module):
     nlayers = number of transformer encoder/decoder layers
 
     """
-    def __init__(self, ntoken: int, d_model: int, nhead: int, d_hid: int,
+    def __init__(self, ntoken: int, nimagetoken: int, d_model: int, nhead: int, d_hid: int,
                  nlayers: int, dropout: float = 0.5, activation: str = 'gelu'):
         super().__init__()
         self.model_type = 'Transformer'
@@ -55,8 +55,8 @@ class TransformerModel(nn.Module):
         decoder_layer = nn.TransformerDecoderLayer(d_model=d_model, nhead=nhead, activation=activation)
         self.transformer_decoder = nn.TransformerDecoder(decoder_layer, num_layers=nlayers)
 
-        self.decoder_embedding = nn.Embedding(ntoken, d_model)
-        self.decoder = nn.Linear(d_model, ntoken)
+        self.decoder_embedding = nn.Embedding(nimagetoken, d_model)
+        self.decoder = nn.Linear(d_model, nimagetoken)
         self.final_softmax = nn.Softmax(ntoken)
 
         self.init_weights()
@@ -91,31 +91,22 @@ def generate_square_subsequent_mask(sz: int) -> Tensor:
     """Generates an upper-triangular matrix of -inf, with zeros on diag."""
     return torch.triu(torch.ones(sz, sz) * float('-inf'), diagonal=1)
 
-with open('vocab.json', 'r') as fhand:
-    vocab = json.load(fhand)
+if __name__ == '__main__':
+    # download_all_used_models()
+    tokenizer = BartTokenizer.from_pretrained("model-downloads/bart-tokenizer")
 
-def words_to_tokens(words):
-
-    def to_token(word):
-        try:
-            return vocab[word]
-        except KeyError:
-            return 3  # <unk> token
-
-    return torch.tensor(list(map(to_token, words)))
+    example = "There is no just cause for an invasion of Iraq."
+    token_dict = tokenizer(example)
+    tokens = torch.tensor(token_dict['input_ids'])
+    src_mask = None
 
 
-# download_all_used_models()
-tokenizer = BartTokenizer.from_pretrained("model-downloads/bart-tokenizer")
+    # Model params match BART except for the nimagetoken, which matches the dalle dVAE
+    model = TransformerModel(ntoken=50265, nimagetoken=8192, d_model=1024, nhead=16, d_hid=12,
+                    nlayers=12, dropout=0.1)
 
-example = "There is no just cause for an invasion of Iraq."
-token_dict = tokenizer(example)
-tokens = torch.tensor(token_dict['input_ids'])
-src_mask = None
+    tgt = torch.zeros((13,)).int()
+    tgt_mask = torch.triu(torch.ones(13, 13) * float('-inf'), diagonal=1)  # Causal mask
+    out = model(tokens, tgt, src_mask, tgt_mask)
 
-model = TransformerModel(ntoken=50265, d_model=1024, nhead=16, d_hid=12,
-                 nlayers=12, dropout=0.1)
-
-tgt = torch.zeros((13,)).int()
-tgt_mask = torch.triu(torch.ones(13, 13) * float('-inf'), diagonal=1)  # Causal mask
-out = model(tokens, tgt, src_mask, tgt_mask)
+    print(out.shape)
