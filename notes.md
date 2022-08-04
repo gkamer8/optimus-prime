@@ -25,6 +25,8 @@ Install requirements from pip using:
 
 For whatever reason, the venv didn't work on lambda labs. This appears intentional.
 
+For using github - use personal authentication token as password, find [here](https://github.com/settings/tokens)
+
 Lambda cloud instances are available here: https://lambdalabs.com/cloud/dashboard/instances
 The account is under gkamer@college.harvard.edu
 
