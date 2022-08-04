@@ -3,8 +3,7 @@ import os
 from torch import nn
 import torch
 
-from transformers.models.bart.modeling_bart import BartEncoder, BartModel, SpecialBartModel, BartForConditionalGeneration
-
+from transformers.models.bart.modeling_bart import BartEncoder, BartModel
 def download_all_used_models(download_folder='model-downloads'):
     download_bart_tokenizer(download_folder)
     
@@ -21,8 +20,8 @@ def download_bart(download_folder='model-downloads'):
     model.save_pretrained(bart_model_path)
 
 
-# download_all_used_models()
-tokenizer = BartTokenizer.from_pretrained("model-downloads/bart-tokenizer")
+download_all_used_models()
+"""tokenizer = BartTokenizer.from_pretrained("model-downloads/bart-tokenizer")
 model = SpecialBartModel.from_pretrained("model-downloads/bart")
 
 example = "There is no just cause for an invasion of Iraq."
@@ -30,4 +29,4 @@ batch = tokenizer(example, return_tensors="pt")
 generated_ids = model.generate(batch["input_ids"])
 
 print(tokenizer.batch_decode(generated_ids, skip_special_tokens=True))
-
+"""
