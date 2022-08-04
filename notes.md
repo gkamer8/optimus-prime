@@ -8,6 +8,8 @@ BART model on hugging face: [link](https://huggingface.co/docs/transformers/mode
 
 VQGAN on hugging face: [link](https://huggingface.co/boris/vqgan_f16_16384)
 
+Notes on transformer in pytorch - https://towardsdatascience.com/a-detailed-guide-to-pytorchs-nn-transformer-module-c80afbc9ffb1
+
 ## The venv:
 
 to use: `source venv/bin/activate`
@@ -42,7 +44,11 @@ Pass outputs to the decoder
 
 Transformer source - https://pytorch.org/docs/stable/_modules/torch/nn/modules/transformer.html#Transformer
 
+## Technical notes
 
+This insane bug fix for an error involving "recompute scale factor"
+[here](https://github.com/openai/DALL-E/issues/54#issuecomment-1092826376)
+--> hopefully will be fixed in new pytorch updates
 
 
 

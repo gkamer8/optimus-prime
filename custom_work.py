@@ -57,7 +57,6 @@ class TransformerModel(nn.Module):
 
         self.decoder_embedding = nn.Embedding(nimagetoken, d_model)
         self.decoder = nn.Linear(d_model, nimagetoken)
-        self.final_softmax = nn.Softmax(ntoken)
 
         self.init_weights()
 
@@ -84,7 +83,7 @@ class TransformerModel(nn.Module):
         tgt = self.decoder_embedding(tgt) * math.sqrt(self.d_model)
         tgt = self.pos_encoder(tgt)
         output = self.transformer_decoder(tgt, output, tgt_mask=tgt_mask)
-        return output
+        return self.decoder(output)
 
 
 def generate_square_subsequent_mask(sz: int) -> Tensor:
