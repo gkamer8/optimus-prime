@@ -50,6 +50,9 @@ This insane bug fix for an error involving "recompute scale factor"
 [here](https://github.com/openai/DALL-E/issues/54#issuecomment-1092826376)
 --> hopefully will be fixed in new pytorch updates
 
+In order to download DALLE encoder and decoder onto VM, follow these steps:
+`curl -O https://cdn.openai.com/dall-e/encoder.pkl`
+And ditto for the encoder
 
 
 
