@@ -18,7 +18,12 @@ Setting up a new venv: `python3 -m venv venv`
 
 Where venv is the name of the virtual environment.
 
+Install requirements from pip using:
+`python3 -m pip install -r requirements.txt`
+
 ## Lambda labs:
+
+For whatever reason, the venv didn't work on lambda labs. This appears intentional.
 
 Lambda cloud instances are available here: https://lambdalabs.com/cloud/dashboard/instances
 The account is under gkamer@college.harvard.edu
@@ -50,9 +55,15 @@ This insane bug fix for an error involving "recompute scale factor"
 [here](https://github.com/openai/DALL-E/issues/54#issuecomment-1092826376)
 --> hopefully will be fixed in new pytorch updates
 
-In order to download DALLE encoder and decoder onto VM, follow these steps:
+Setting up filesystem on vm:
+
+In order to download DALLE encoder and decoder onto VM, run:
 `curl -O https://cdn.openai.com/dall-e/encoder.pkl`
 And ditto for the encoder
+
+At present it's also necessary to move the files into the DALL-E folder.
+
+
 
 
 
